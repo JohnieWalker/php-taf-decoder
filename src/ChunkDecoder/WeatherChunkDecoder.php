@@ -19,7 +19,7 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         'SA', 'DU', 'HZ', 'FU',
         'VA', 'PY', 'DU', 'PO',
         'SQ', 'FC', 'DS', 'SS',
-        '//', "NSW"
+        '//', 'NSW'
     );
 
     public function getRegexp()
