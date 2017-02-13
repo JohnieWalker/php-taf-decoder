@@ -44,6 +44,7 @@ class WeatherChunkDecoder extends TafChunkDecoder implements TafChunkDecoderInte
         for ($i = 1; $i <= 13; $i += 6) {
             if ($found[$i] != null && $found[$i + 3] != '//') {
                 $weather = new WeatherPhenomenon();
+                $weather->setChunk(trim($found[$i]));
                 $weather->setIntensityProximity($found[$i + 1]);
                 $weather->setDescriptor($found[$i + 2]);
                 for ($k = 3; $k <= 5; ++$k) {
