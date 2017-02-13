@@ -250,22 +250,19 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         $getter_name    = 'get' . ucfirst($entity_name);
         $setter_name    = 'set' . ucfirst($entity_name);
         $decoded_entity = $decoded_taf->$getter_name();
-        if ($decoded_entity == null || $entity_name == 'clouds') {
+        if ($decoded_entity == null || $entity_name == 'clouds' || $entity_name == 'weatherPhenomenons') {
             // that entity is not in the decoded_taf yet, or it's a cloud layer which is a special case
             $decoded_entity = $this->instantiateEntity($entity_name);
         }
 
         // add the new evolution to that entity
-        // weatherPhenomenon is an array of weatherPhenomenon entities, so we have to add
-        if($entity_name == 'weatherPhenomenon' && is_array($decoded_entity)){
-            $decoded_entity[0]->addEvolution($new_evolution);
-        }else{
-            $decoded_entity->addEvolution($new_evolution);
-        }
+        $decoded_entity->addEvolution($new_evolution);
 
         // update the decoded taf's entity or add the new one to it
         if ($entity_name == 'clouds') {
             $decoded_taf->addCloud($decoded_entity);
+        } elseif ($entity_name == 'weatherPhenomenons') {
+            $decoded_taf->addWeatherPhenomenon($decoded_entity);
         } else {
             $decoded_taf->$setter_name($decoded_entity);
         }
@@ -282,8 +279,7 @@ class EvolutionChunkDecoder extends TafChunkDecoder implements TafChunkDecoderIn
         $entity = null;
 
         if ($entity_name == 'weatherPhenomenon') {
-            // should be an array of weatherPhenomenons
-            $entity[] = new WeatherPhenomenon();
+            $entity = new WeatherPhenomenon();
         } else if ($entity_name == 'maxTemperature') {
             $entity =  new Temperature();
         } else if ($entity_name == 'minTemperature') {
